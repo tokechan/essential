@@ -1,7 +1,23 @@
-const name = "Mike";
+const fs = require("fs");
 
-const add = function (a, b) {
-    return a + b;
+const person = {
+    name: "Mike",
+    age: 20
 };
 
-module.exports = { name, add };
+const read = function() {
+    fs.readFile("./hello.txt", "utf8",function(err, data){
+        console.log(data);
+    });
+};
+
+const write = function () {
+    fs.writeFile("hello.json",JSON.stringify(person), function() {
+        console.log("done");
+    });
+};
+
+module.exports = { 
+    read: read,
+    write: write
+};
