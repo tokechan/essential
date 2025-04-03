@@ -80,3 +80,26 @@ JaveScript Object Notation
 書いて字の如く、JavaScriptの記述方法
 
 ###JSONで書き出す方法
+1.まず、定数か変数の中に書き出したい情報を書く
+```const person = { "name": "Toke", "age" 38}```
+2.そして、fs.writeFileのコードを書き換える
+```fs.writeFile("hello.json", JSON.stringfy(person), function(){});```
+大事なのは拡張をjsonに書き換える、JSON.stringfyを書き加える
+このfs.writeFile()function(){};の部分の書き方に関してはDocsに書いてあるので知りたければそこを見る
+3.stringfyは渡せされたオブジェクトをテキストに変換する関数（JSの機能）
+4.CLI上でnode sample.js writeとコマンドを叩くと新しくJSONフォーマットとして描き出せる
+
+###JSONファイルを読み込む方法（書き出すの反対）
+1.fs.readFileのコードを書き換える
+```fs.readFile("./hello.json","uft8", function (err, data){console.log(data);})```
+大事なのは拡張子をjsonに書き換える
+2.このまま、だとテキストとしてCLIで読み込むことはできる。形式はテキストになる{"name":"Mike","age":30}となる
+3.console.log(data.name);とするとundefinedとして返ってくる
+4.jsonからデータを読み取った時にjsonファイル自体はテキスト形式で読み取られる。それを復元した時にテキストになってしまうのでundefinedになる
+5.なので、テキストからオブジェクトに復元するために```JSON.perse()```を使用する
+6.perseは渡されたテキストをオブジェクトに変換する関数（JSの機能）
+7.```const person = JSON.perse(data) consol.log(person.name);```と記述する
+8.CLI上でnode sample.js readとコマンドを叩くとちゃんとオブジェクトから読み込みできる
+
+
+
