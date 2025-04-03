@@ -6,8 +6,9 @@ const person = {
 };
 
 const read = function() {
-    fs.readFile("./hello.txt", "utf8",function(err, data){
-        console.log(data);
+    fs.readFile("./hello.json", "utf8",function(err, data){
+        const person = JSON.parse(data);
+        console.log(person.name);
     });
 };
 
