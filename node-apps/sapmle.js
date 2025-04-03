@@ -1,4 +1,10 @@
-const { name, add } = require("./helper");
+const fs = require("fs");
+console.log("start");
+// fs.writeFile("hello.txt", "Hello World", function() {
+//     console.log("done");
+// });
 
-console.log(name);
-console.log(add(2, 3));
+fs.readFile("./hello.txt", "utf8",function(err, data){
+    console.log(data);
+});
+console.log("end");
