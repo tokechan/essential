@@ -103,3 +103,33 @@ JaveScript Object Notation
 
 
 
+## web-server構築する
+適宜フォルダとファイルを作成するここではweb-serverというフォルダを作成してその中にindex.jsファイルを作成
+そして、Node.jsの豊富なパッケージや外部ライブラリを使用するためにinitを行う
+これは、新しいプロジェクトを初期化するということ
+cd web-serverをしてルートで```npm init```を実行
+
+`npm init`を実行すると、以下のような項目について対話形式で入力を求められます：
+
+- **パッケージ名**（package name）
+- **バージョン**（version）
+- **説明**（description）
+- **エントリーポイント**（entry point）
+- **テストコマンド**（test command）
+- **Gitリポジトリ**（git repository）
+- **キーワード**（keywords）
+- **作者**（author）
+- **ライセンス**（license）
+
+これらの情報を入力することで、`package.json`が作成され、プロジェクトの設定や依存関係の管理が容易になります。 s
+
+また、`npm init -y`とコマンドに`-y`オプションを付けて実行すると、すべての項目がデフォルト値で自動的に設定され、対話なしで`package.json`が生成されます。
+
+`npm init`を使用してプロジェクトを初期化することで、依存パッケージの管理やプロジェクトの共有がスムーズに行えるようになります。
+
+初期化できたら、次に今回使用するExpressをインストールしていく
+```npm i express```を叩くことで自動でnode_modulesが作成されてそこの中にパッケージ本体が入っていく
+基本的にはnode_modulesは触ることはない
+インストールできたら、index.jsにサーバーとして立ち上げるコードを書いていく
+https://www.npmjs.com/package/express　を参照する
+コードを記述したら、ルートで```node index.js```とするだけで簡易サーバーが立ち上がる
