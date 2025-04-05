@@ -133,3 +133,104 @@ cd web-serverをしてルートで```npm init```を実行
 インストールできたら、index.jsにサーバーとして立ち上げるコードを書いていく
 https://www.npmjs.com/package/express　を参照する
 コードを記述したら、ルートで```node index.js```とするだけで簡易サーバーが立ち上がる
+
+###イベントドリブン
+イベントドリブン＝イベントが来た時に走る
+リクエストが来た、イベントが走る
+
+##コールバック関数の動き
+まず、node index.jsで簡易サーバを立ち上げた際にCLI上にわかりやすく動いているのを明示する
+```
+app.listen(3000, function(){
+    console.log("Server is running on port 3000");
+});
+```
+ここからコールバック関数の動きを確認していく
+一番下に
+```console.log("最終行");```を書いて再度サーバーを再起動する
+するとCLI上には
+最終行
+Servier is running on port 3000
+という順番で出力される
+
+なぜか？
+プログラムは上から順番に処理をしていく
+まず、app.getとapp.lisetenが処理されるがNode.js側が重たい処理と判断して
+コールバックでスレッドプールに送る
+そして、一気に下まで処理がないかを確認して最後にconsole.lo("最終行")に出会い
+軽い処理なのでその場で実行する
+その後に、スレッドプールで処理されたapp.listenが遅れてCLI上に結果として出てくる
+app.getの処理はあくまで宣言されている処理が起きた時にのみコールバック関数の中身だけが実行される
+
+
+## HTMLやJSONを返す方法
+ これがres.send('Hello World' + 'Hello hiratsuka!!!');
+
+こうでHTMLで返す```res.send("<h1>Hello World</h1>" + "<h2>Hello hiratsuka!!!</h2>");```
+
+こうでJSONで返す
+```res.send({
+        name: "hiratsuka",
+        age: 20,
+        email: "hiratsuka@gmail.com"
+    });
+```
+
+## Reuest & Response
+http通信について
+URLにみたいページを入力してrequestされる
+そのリクエストはGETメソッド送られ
+そのrequestをサーバ側が処理をして何かしらをresponseとして返す
+これが一連の通信
+
+console.log(req)を仕込んでURLを更新するとどんなリクエストがあるか見れる
+
+## nodemon
+npm i nodemonでもいいがこのプロジェクトでしか使えない
+なので、グローバルにインストールすると手元のマシンの中に入れるのでどのプロジェクトでも使えるようになる
+```npm install -g nodemon```
+を叩くことでマシンにグローバルでインストールされる
+
+
+## HTMLを読み込めるようにする方法
+前提として
+フロント側はPublicの中に記述されている
+バックエンド側はindex.js
+publicの中にあるindex.htmlを読み込ませるようにしたい
+index.jsからpublic/index.htmlファイル位置を読ませたいののです
+まず、index.jsがどこにいるのか？を判別させるために
+```consoel.log(__dirname)```を使用して保存すると
+CLI上にどこに位置するかが判明する
+これを元にpublicの位置を指定していく
+使用するライブラリがあり
+```cosnt path = require("path")```を使用する
+その後、
+```app.use(express.static(patch.join(__dirname, "public")))```
+を使用してpublicの中にあるhtmlファイル達を簡単に読み込めるようになる
+URLで
+localhost:3000がindex.htmlとなり
+localhost:3000/about.htmlはabout.htmlが表示される
+
+## フォーム情報をバックエンドに送信する方法
+前提として
+フロント側はPublicの中に記述されている
+バックエンド側はindex.js
+index.jsの中に
+```app.use(express.static(patch.join(__dirname, "public")))```
+があるのでpublicの中のコンテンツを参照できるようになっている
+
+フォーム情報を送信するときはAPIとしてバックエンドと接続が必要
+```
+app.post("/api/v1/quiz", function (req, res){
+    const answer = req.body.answer;
+    res.send(answer);
+});
+```
+
+これはおまじないみたいなものだけど必要
+```app.use(express.urlencoded({ extended: false }));```
+これを加えることで、req.bodyが使えるようになる
+
+そして、フロント側にバックエンド側でで意義しているURLを設定する
+```<form action="/api/v1/quiz" method="POST">```
+actionの中にURLを入れ、メソッドを今回はPOSTでリクエストを送る
